@@ -1,3 +1,15 @@
+const quiz = document.getElementById('quiz')
+const answerEls = document.querySelectorAll('.answer')
+const questionEl = document.getElementById('question')
+const a_text = document.getElementById('a_text')
+const b_text = document.getElementById('b_text')
+const c_text = document.getElementById('c_text')
+const d_text = document.getElementById('d_text')
+const submitBtn = document.getElementById('submit')
+const preguntas = []
+let nivel = 0
+let puntuacion = 0
+
 async function getQ() {
     try{
         let response = await fetch('https://opentdb.com/api.php?amount=10&category=11&type=multiple')
@@ -5,88 +17,84 @@ async function getQ() {
         let ronda = data.results
         // console.log("esto es ronda", ronda)
         let questions = ronda.map(({correct_answer, incorrect_answers, question}) => {
-          return  {
+          let algo = {
             pregunta: question,
             respuestas: [correct_answer, incorrect_answers[0], incorrect_answers[1], incorrect_answers[2]]
           }
   
+          preguntas.push(algo)
       })
-        return questions
+        // console.log("esto es pregunta", preguntas)
       
     } catch {
       console.log("error")
     }
   }
+ 
   
-  // getQ().then(data  => data)
-  
-  const quiz = document.getElementById('quiz')
-  const answerEls = document.querySelectorAll('.answer')
-  const questionEl = document.getElementById('question')
-  const a_text = document.getElementById('a_text')
-  const b_text = document.getElementById('b_text')
-  const c_text = document.getElementById('c_text')
-  const d_text = document.getElementById('d_text')
-  const submitBtn = document.getElementById('submit')
-  
-  let nivel = 0
-  let puntuacion = 0
-  
-  loadQuiz()
-  
-  async function loadQuiz() {
-    const pregunta = await getQ().then(questions  => questions)
-    // console.log('este es el quiz', pregunta)
+  function loadQuiz() {
+    //   console.log(preguntas[0])
+      
+    //   console.log(preguntas);
+      deselAnswer()
+      
+      let nivelPregunta = preguntas[nivel]
+      
+      
+      questionEl.innerHTML = nivelPregunta.pregunta
+      a_text.innerHTML = nivelPregunta.respuestas[0]
+      b_text.innerHTML = nivelPregunta.respuestas[1]
+      c_text.innerHTML = nivelPregunta.respuestas[2]
+      d_text.innerHTML = nivelPregunta.respuestas[3]
+    }
+
+
     
-    deselAnswer()
-    
-    const nivelPregunta = pregunta[nivel]
-  
-    questionEl.innerHTML = nivelPregunta.pregunta
-    a_text.innerHTML = nivelPregunta.respuestas[0]
-    b_text.innerHTML = nivelPregunta.respuestas[1]
-    c_text.innerHTML = nivelPregunta.respuestas[2]
-    d_text.innerHTML = nivelPregunta.respuestas[3]
-  }
-  
   function deselAnswer() {
     answerEls.forEach(answerEls => answerEls.checked = false)
   }
+ 
   
-  // function elegida() {
-  //   let respuesta = document.getElementById("a_text")
-  //   // answerEls.forEach(answerEls => {
-  //   //   if(answerEls.checked) {
-  //   //     answer = answerEls.id
-  //   //   }
-  //   // })
-  //   // return answer
-  //   console.log("respuesta", respuesta)
-  // }
-  
-  
-  submitBtn.addEventListener('click', async () => {
-    // const respuesta = elegida()
-    const pregunta = await getQ().then(questions  => questions)
-    let respuesta = document.getElementById("a_text").innerText
-    console.log(respuesta)
-    const nivelPregunta = pregunta[nivel]
-    if(respuesta == nivelPregunta.respuestas[0]) {
+  submitBtn.addEventListener('click', () => {
+    let respuesta = document.getElementById("a")
+    // console.log('estos es respuesta', respuesta)
+    const nivelPregunta = preguntas[nivel]
+    // console.log(nivelPregunta.respuestas[0])
+    if(respuesta.checked) {
       puntuacion++
     }
     nivel++
-    if(nivel < pregunta.length) {
+    if(nivel < preguntas.length) {
       loadQuiz()
-    } else {
+    }
+    else {
       quiz.innerHTML = `
-        <h2>You answered ${puntuacion}/${pregunta.length} questions correctly</h2>
+        <h2>You answered ${puntuacion}/${preguntas.length} questions correctly</h2>
         <button onclick="location.reload()">Reload</button>`
     }
   })
   
   
-  
-  // const rand = (max, min) => Math.floor(Math.random() * (max - min)) + min
+const imprimir = async () =>{
+    try {
+        const api = await getQ()
+        const load = await loadQuiz()
+    }
+    catch{
+        console.log('error')
+    }
+}  
+
+imprimir()
+
+const empezar = document.getElementById("empezar");
+console.log(empezar)
+  empezar.addEventListener('click', () => {
+      imprimir()
+  })
+
+
+// const rand = (max, min) => Math.floor(Math.random() * (max - min)) + min
   
       
       // const random = () => {
@@ -111,4 +119,3 @@ async function getQ() {
   //   .then(res=>res.json())
   //   .then(json=>console.log(json))
 
-  

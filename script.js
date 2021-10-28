@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-analytics.js";
-import {getFirestore, collection, addDoc} from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+import {getFirestore, collection, addDoc, query, getDocs} from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -104,7 +104,9 @@ submitBtn.addEventListener("click", () => {
         <button onclick="location.reload()">Reload</button>
         <input type="text" name="nombre" id="name" >
         <label for="nombre">Nombre</label>
-        <input type="button" id="enviar" value="Send result"/>`;
+        <input type="button" id="enviar" value="Send result"/>
+        <div class="ct-chart ct-perfect-fourth"></div>`;
+        grafica()
 /////////////////////////Función para pasar datos a firestore//////////////////////////////////////////////////
         const enviar = document.getElementById("enviar");
         let nombre = document.getElementById("name");
@@ -136,7 +138,41 @@ const imprimir = async () => {
 
 imprimir();
 
+/////////////////////////////////Sacamos array con los nombres de firebase////////////////////////////////////
+let usuariosN = []
+console.log("nombres", usuariosN)
 
+const q = query(collection(db, "users"))
+const querySnapshot = await getDocs(q);
+querySnapshot.forEach((doc) => {
+  return usuariosN.push(doc.data().nombre);
+});
+
+//////////////////////////////Sacamos array con la puntuación de firebase//////////////////////////////////////
+let usuariosP = []
+console.log("puntuacion", usuariosP)
+
+const u = query(collection(db, "users"))
+const querySnapshot1 = await getDocs(u);
+querySnapshot1.forEach((doc) => {
+  return usuariosP.push(doc.data().puntuacion);
+});
+
+///////////////////////////////Gráfica//////////////////////////////////////////////////////////////////////////
+
+function grafica (){
+var grafica = {
+  labels: usuariosN,
+  series: [usuariosP] ///////series es un array de arrays y tiene que estar dentro de un array
+}
+
+var options = {
+  width: 600,
+  height: 600,
+  axisY: {onlyInteger: true} 
+}
+
+new Chartist.Bar('.ct-chart', grafica, options);}
 
 // if (document.getElementById("enviar")) {
     

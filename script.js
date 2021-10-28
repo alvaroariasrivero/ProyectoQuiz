@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-analytics.js";
-import {getFirestore, collection, addDoc} from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+import {getFirestore, collection, addDoc, query, getDocs} from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -37,30 +37,25 @@ let puntuacion = 0;
 /////////////////////////////////////Función para conseguir preguntas de la api//////////////////////////////////
 async function getQ() {
     try {
-        let response = await fetch(
-            "https://opentdb.com/api.php?amount=10&category=11&type=multiple"
-        );
+        let response = await fetch("https://opentdb.com/api.php?amount=10&category=11&type=multiple");
         let data = await response.json();
         let ronda = data.results;
         // console.log("esto es ronda", ronda)
-        let questions = ronda.map(
-            ({ correct_answer, incorrect_answers, question }) => {
-                let algo = {
-                    pregunta: question,
-                    respuestas: [
-                        correct_answer,
-                        incorrect_answers[0],
-                        incorrect_answers[1],
-                        incorrect_answers[2],
-                    ],
-                };
-
-                preguntas.push(algo);
-            }
-        );
+        let questions = ronda.map(({ correct_answer, incorrect_answers, question }) => {
+          let algo = {
+            pregunta: question,
+            respuestas: [
+                correct_answer,
+                incorrect_answers[0],
+                incorrect_answers[1],
+                incorrect_answers[2],
+              ],
+          };
+          preguntas.push(algo);
+        });
         // console.log("esto es pregunta", preguntas)
     } catch {
-        console.log("error");
+      console.log("error");
     }
 }
 
@@ -104,7 +99,9 @@ submitBtn.addEventListener("click", () => {
         <button onclick="location.reload()">Reload</button>
         <input type="text" name="nombre" id="name" >
         <label for="nombre">Nombre</label>
-        <input type="button" id="enviar" value="Send result"/>`;
+        <input type="button" id="enviar" value="Send result"/>
+        <div class="ct-chart ct-perfect-fourth"></div>`;
+        grafica()
 /////////////////////////Función para pasar datos a firestore//////////////////////////////////////////////////
         const enviar = document.getElementById("enviar");
         let nombre = document.getElementById("name");
@@ -126,17 +123,51 @@ submitBtn.addEventListener("click", () => {
 
 ////////////////////////Función para esperar a tener las preguntas antes de imprimirlas/////////////////////////
 const imprimir = async () => {
-    try {
-        const api = await getQ();
-        const load = await loadQuiz();
-    } catch {
-        console.log("error");
-    }
+  try {
+      const api = await getQ();
+      const load = await loadQuiz();
+  } catch {
+      console.log("error");
+  }
 };
 
 imprimir();
 
+/////////////////////////////////Sacamos array con los nombres de firebase////////////////////////////////////
+let usuariosN = []
+console.log("nombres", usuariosN)
 
+const q = query(collection(db, "users"))
+const querySnapshot = await getDocs(q);
+querySnapshot.forEach((doc) => {
+  return usuariosN.push(doc.data().nombre);
+});
+
+//////////////////////////////Sacamos array con la puntuación de firebase//////////////////////////////////////
+let usuariosP = []
+console.log("puntuacion", usuariosP)
+
+const u = query(collection(db, "users"))
+const querySnapshot1 = await getDocs(u);
+querySnapshot1.forEach((doc) => {
+  return usuariosP.push(doc.data().puntuacion);
+});
+
+///////////////////////////////Gráfica//////////////////////////////////////////////////////////////////////////
+
+function grafica (){
+var grafica = {
+  labels: usuariosN,
+  series: [usuariosP] ///////series es un array de arrays y tiene que estar dentro de un array
+}
+
+var options = {
+  width: 600,
+  height: 600,
+  axisY: {onlyInteger: true} 
+}
+
+new Chartist.Bar('.ct-chart', grafica, options);}
 
 // if (document.getElementById("enviar")) {
     

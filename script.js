@@ -37,30 +37,25 @@ let puntuacion = 0;
 /////////////////////////////////////Función para conseguir preguntas de la api//////////////////////////////////
 async function getQ() {
     try {
-        let response = await fetch(
-            "https://opentdb.com/api.php?amount=10&category=11&type=multiple"
-        );
+        let response = await fetch("https://opentdb.com/api.php?amount=10&category=11&type=multiple");
         let data = await response.json();
         let ronda = data.results;
         // console.log("esto es ronda", ronda)
-        let questions = ronda.map(
-            ({ correct_answer, incorrect_answers, question }) => {
-                let algo = {
-                    pregunta: question,
-                    respuestas: [
-                        correct_answer,
-                        incorrect_answers[0],
-                        incorrect_answers[1],
-                        incorrect_answers[2],
-                    ],
-                };
-
-                preguntas.push(algo);
-            }
-        );
+        let questions = ronda.map(({ correct_answer, incorrect_answers, question }) => {
+          let algo = {
+            pregunta: question,
+            respuestas: [
+                correct_answer,
+                incorrect_answers[0],
+                incorrect_answers[1],
+                incorrect_answers[2],
+              ],
+          };
+          preguntas.push(algo);
+        });
         // console.log("esto es pregunta", preguntas)
     } catch {
-        console.log("error");
+      console.log("error");
     }
 }
 
@@ -128,12 +123,12 @@ submitBtn.addEventListener("click", () => {
 
 ////////////////////////Función para esperar a tener las preguntas antes de imprimirlas/////////////////////////
 const imprimir = async () => {
-    try {
-        const api = await getQ();
-        const load = await loadQuiz();
-    } catch {
-        console.log("error");
-    }
+  try {
+      const api = await getQ();
+      const load = await loadQuiz();
+  } catch {
+      console.log("error");
+  }
 };
 
 imprimir();

@@ -1,24 +1,73 @@
 body {
     background-color: cadetblue;
     font-family: Arial, Helvetica, sans-serif;
-    display: flex;
-    justify-content: center;
+    text-align: center;
+    color: #222222;
+}
+
+h1 {
+    font-family: 'Fruktur', cursive;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.quiz-container {
+    font-family: 'Fruktur', cursive;
+}
+
+p {
+    font-family: 'Fruktur', cursive;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.intro {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #preguntas {
     list-style: none;
     padding: 0px;
     margin-top: 100px;
-    width: 800px;
+    width: 50rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.answer {
+    background-color: transparent;
+}
+
+.quiz-container {
+    width: 100%;
 }
 
 li {
     width: 100%;
     background-color: white;
+    color: #222222;
     border-radius: 5px;
     padding: 20px;
     display: flex;
     flex-direction: column;
+}
+
+.resultado {
+    text-align: center;
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.grafico {
+    width: 100%;
+}
+
+.grafico div {
+    width: 100%;
 }
 
 .contenido {
@@ -29,7 +78,7 @@ li {
 
 .quiz-header {
     text-align: center;
-    color: blue;
+    color: #222222;
     margin-bottom: 10px;
 }
 
@@ -44,6 +93,7 @@ li {
 
 button {
     background-color: lightblue;
+    font-family: 'Fruktur', cursive;
     color: grey;
     font-size: 20px;
     padding: 10px;
@@ -83,9 +133,53 @@ label {
     background-color: mediumpurple;
 }
 
+.enviar {
+    display: flex;
+    width: 100%;
+    margin-bottom: 0.3rem;
+    justify-content: center;
+}
+
+.enviar * {
+    padding: 0.3rem;
+}
+
+#enviar {
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 
 @media (max-width: 426px) {
+    *{
+        margin: 0px;
+    }
+
+    h1 {
+        font-family: 'Fruktur', cursive;
+        text-align: center;
+        width: 30rem;
+        margin-top: 1.5rem;
+        margin-left: 1rem;
+        font-size: 3rem;
+    }
     
+    p {
+        font-family: 'Fruktur', cursive;
+        width: 30rem;
+        text-align: center;
+        font-size: 1.5rem;
+        margin-left: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .intro {
+        width: 6.25rem;
+        height: 6.25rem;
+    }
+
     #preguntas {
         margin-top: 10px;
         width: 100%;
@@ -97,12 +191,17 @@ label {
     }
     
     li {
-        width: auto;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    label {
+        font-size: 0.7rem;
     }
 
     .box {
         margin: 3px;
-        /* border-radius: 0px; */
         padding-top: 25px;
         padding-bottom: 25px;
     }
@@ -110,4 +209,24 @@ label {
     legend {
         margin-bottom: 10px;
     }
+
+    .resultado {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 1.5rem;
+    }
+
+    #enviar {
+        width: 100%;
+    }
+
+    .enviar {
+        justify-content: center;
+    }
+
+    span.ct-label.ct-horizontal.ct-end {
+        font-size: 0.625rem;
+    }
+
 }

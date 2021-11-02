@@ -145,6 +145,7 @@ submitBtn.addEventListener("click", () => {
       <input type="text" name="nombre" id="name" >
       </div>
       <input type="button" id="enviar" value="Send result"/>
+      <h2>Best Scores</h2>
       <div class="grafico">
       <div class="ct-chart ct-perfect-fourth"></div>
       </div>

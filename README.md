@@ -1,6 +1,3 @@
-# ProyectoQuiz de Halloween
-styles
-creacion rama styles
+# MovieQuiz
 
-html
-develop
+https://alvaroariasrivero.github.io/ProyectoQuiz/
